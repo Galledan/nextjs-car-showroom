@@ -1,7 +1,20 @@
-import { CustomFilter, Hero, SearchBar } from "@/components";
+import { CarCard, CustomFilter, Hero, SearchBar } from "@/components";
+import { fetchCars } from "@/utils";
+import { log } from "console";
 
 
-export default function Home() {
+//Next js allows page functions to be async
+
+export default async function Home() {
+
+  const allCars = await fetchCars();
+
+  const isDataEmpty = !Array.isArray(allCars) || allCars.length <1 || !allCars;
+
+   // console.log(allCars); log comes to terminal instead of web console due to next js components are server components if we use use client it comes to client
+
+  
+  
   return (
     <main className="overflow-hidden">
       <Hero />
@@ -19,6 +32,22 @@ export default function Home() {
 
           </div>
         </div>
+
+
+        {!isDataEmpty ? (
+          <section>
+            <div className="home__cars-wrapper">
+              {allCars?.map((car) => (
+              <CarCard car={car}/>
+              ))}
+            </div>
+          </section>
+        ): (
+          <div className="home__error_container">
+            <h2 className="text-black text-wl font-bold">OOPS NO RESULTS</h2>
+            <p>{allCars?.message}</p>
+          </div>
+        )}
       </div>
     </main>
   );
