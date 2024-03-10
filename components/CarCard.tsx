@@ -4,7 +4,7 @@ import { CarCardProps } from "@/types"
 import { calculateCarRent } from "@/utils"
 import Image from "next/image"
 import { useState } from "react"
-import { CustomButton } from "."
+import { CarDetails, CustomButton } from "."
 
 
 const CarCard = ({ car }: CarCardProps) => {
@@ -54,20 +54,21 @@ const CarCard = ({ car }: CarCardProps) => {
                         <p className="car-card__icon-text">{city_mpg} MPG</p>
                     </div>
                 </div>
-                
+
                 <div className="car-card__btn-container">
-                <CustomButton
-                    title='View More'
-                    containerStyles='w-full py-[16px] rounded-full bg-primary-blue'
-                    textStyles='text-white text-[14px] leading-[17px] font-bold'
-                    rightIcon='/right-arrow.svg'
-                    handleClick={() => setIsOpen(true)}
-                />
+                    <CustomButton
+                        title='View More'
+                        containerStyles='w-full py-[16px] rounded-full bg-primary-blue'
+                        textStyles='text-white text-[14px] leading-[17px] font-bold'
+                        rightIcon='/right-arrow.svg'
+                        handleClick={() => setIsOpen(true)}
+                    />
+                </div>
             </div>
 
-            </div>
+            <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} />
 
-         
+
         </div>
     )
 }
