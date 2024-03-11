@@ -1,20 +1,25 @@
 import { CarCard, CustomFilter, Hero, SearchBar } from "@/components";
 import { fetchCars } from "@/utils";
-import { log } from "console";
 
 
 //Next js allows page functions to be async
 
-export default async function Home() {
 
-  const allCars = await fetchCars();
+export default async function Home({ searchParams }) {
 
-  const isDataEmpty = !Array.isArray(allCars) || allCars.length <1 || !allCars;
+  const allCars = await fetchCars({ 
+    manufacturer: searchParams.manufacturer || '', 
+    year: searchParams.year || 2022, 
+    fuel: searchParams.fuel || '', 
+    limit: searchParams.limit || 10, 
+    model: searchParams.model || '' });
 
-   // console.log(allCars); log comes to terminal instead of web console due to next js components are server components if we use use client it comes to client
+  const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 
-  
-  
+  // console.log(allCars); log comes to terminal instead of web console due to next js components are server components if we use use client it comes to client
+
+
+
   return (
     <main className="overflow-hidden">
       <Hero />
@@ -27,8 +32,8 @@ export default async function Home() {
         <div className="home__filters">
           <SearchBar />
           <div className="home__filter-container">
-            <CustomFilter title="fuel"/>
-            <CustomFilter title="year"/>
+            <CustomFilter title="fuel" />
+            <CustomFilter title="year" />
 
           </div>
         </div>
@@ -38,11 +43,11 @@ export default async function Home() {
           <section>
             <div className="home__cars-wrapper">
               {allCars?.map((car) => (
-              <CarCard key={car} car={car}/>
+                <CarCard key={car} car={car} />
               ))}
             </div>
           </section>
-        ): (
+        ) : (
           <div className="home__error_container">
             <h2 className="text-black text-wl font-bold">OOPS NO RESULTS</h2>
             <p>{allCars?.message}</p>
